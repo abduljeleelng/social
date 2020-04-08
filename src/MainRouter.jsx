@@ -10,9 +10,9 @@ export default class MainRouter extends Component {
             <div>
                 <BrowserRouter>
                     <Switch>  
-                        <PrivateRoute exact path="/" component={Home}  />
+                        <PrivateRoute exact path="/b" component={Home}  />
                         <Route exact path="/home" component={Home} />
-                        <Route exact path="/signup" component={SignUp} />
+                        <Route exact path="/" component={SignUp} />
                     </Switch>
                 </BrowserRouter>
                 
