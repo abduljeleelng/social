@@ -10,14 +10,12 @@ export default class MainRouter extends Component {
             <div>
                 <BrowserRouter>
                     <Switch>  
-                        <PrivateRoute exact path="/b" component={Home}  />
+                        <PrivateRoute exact path="/" component={Home}  />
                         <Route exact path="/home" component={Home} />
-                        <Route exact path="/" component={SignUp} />
+                        <Route exact path="/bm" component={SignUp} />
                     </Switch>
                 </BrowserRouter>
-                
             </div>
-        
         )
     }
 }
