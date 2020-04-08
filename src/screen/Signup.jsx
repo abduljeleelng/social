@@ -5,9 +5,6 @@ export default class Signup extends Component {
     render() {
         return (
           <>
-  {/*Header End*/}
-  {/* Landing Page Contents
-    ================================================= */}
   <div id="lp-register">
     <div className="container wrapper">
       <div className="row">
