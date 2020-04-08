@@ -1,3 +1,4 @@
 import SignUp from './Signup';
+import Home from './Home';
 
-export {SignUp}
+export {SignUp,Home}

@@ -1,8 +1,9 @@
 import React from 'react';
-import {SignUp} from './screen';
+import MainRouter from './MainRouter';
+
 function App() {
   return (
-    <SignUp />
+    <MainRouter />
   );
 }
 
