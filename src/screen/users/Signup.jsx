@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { signup, signin, authenticate } from '../api';
+import { signup, signin, authenticate } from '../auth';
 
 
 function validateEmail(email) {
