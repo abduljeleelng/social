@@ -1,8 +1,70 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { signup, signin, authenticate } from '../api';
 
+
+function validateEmail(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
 export default class Signup extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      loading:false,
+      error:'',
+      email:'',
+      password:'',
+      firstName:'',
+      lastName:'',
+      day:'',
+      month:'',
+      year:'',
+      gender:'Unknow',
+      city:'',
+      country:'',
+      message:'',
+      redirecTo:false,
+    };
+  };
+  handleChange=email=>e=>{
+    this.setState({[email]:e.target.value,error:'',message:''});
+  };
+  signIn=e=>{
+    e.preventDefault();
+    this.setState({loading:true});
+    const {email,password} = this.state;
+    const user = {email,password};
+    console.log(JSON.stringify(user));
+    if (password !== "" && validateEmail(email)){
+      signin(user).then(data=>{
+        if(data===undefined){return this.setState({loading:false, error:"network error | Internal server Error"}); }
+        if (data.error){ return this.setState({loading:false,error:data.error});}
+        if (data.token){ return authenticate(data,()=>{ this.setState({user:data.user,redirecTo:true,email:"",password:"",loading:false}); })}
+        return  this.setState({loading:false,error:"Undentify Error, Conatct Web Admin"});
+        })
+    } 
+    return this.setState({error:"Enter valid email and Password",loading:false});
+  };
+
+  signUp=e=>{
+    e.preventDefault();
+    this.setState({loading:true})
+    const {email,password,firstName,lastName,day,month,year,gender,city,country} = this.state;
+    const age = `${day}/${month}/${year}`;
+    const user = {email,password,firstName,lastName,day,month,year,gender,city,country,age};
+    console.log(JSON.stringify(user));
+    if(validateEmail(email)){
+      signup(user).then(data=>{
+        if(data.error){return this.setState({error:data.error})}
+        this.setState({loading:false,message:data.messages,});
+      });
+    }
+    return this.setState({loading:false, error:"Enter Valid email address"});
+  }
     render() {
+      const {loading,error,email,password,firstName,lastName,day,month,year,gender,city,country,message,redirecTo} = this.state;
+      if(redirecTo){return <Redirect to="/" />}
         return (
           <>
   <div id="lp-register">
@@ -30,35 +92,37 @@ export default class Signup extends Component {
                 <h3>Register Now !!!</h3>
                 <p className="text-muted">Be cool and join today. Meet millions</p>
                 {/*Register Form*/}
+                  <p className='text-danger text-center'>{error}</p>
+                  <h2>{message}</h2>
                 <form name="registration_form" id="registration_form" className="form-inline">
                   <div className="row">
                     <div className="form-group col-xs-6">
                       <label htmlFor="firstname" className="sr-only">First Name</label>
-                      <input id="firstname" className="form-control input-group-lg" type="text" name="firstname" title="Enter first name" placeholder="First name" />
+                      <input id="firstname" value={firstName} onChange={this.handleChange('firstName')} className="form-control input-group-lg" type="text" placeholder="First name" />
                     </div>
                     <div className="form-group col-xs-6">
                       <label htmlFor="lastname" className="sr-only">Last Name</label>
-                      <input id="lastname" className="form-control input-group-lg" type="text" name="lastname" title="Enter last name" placeholder="Last name" />
+                      <input id="lastname" value={lastName} onChange={this.handleChange('lastName')}  className="form-control input-group-lg" type="text"  placeholder="Last name" />
                     </div>
                   </div>
                   <div className="row">
                     <div className="form-group col-xs-12">
                       <label htmlFor="email" className="sr-only">Email</label>
-                      <input id="email" className="form-control input-group-lg" type="text" name="Email" title="Enter Email" placeholder="Your Email" />
+                      <input id="email" value={email} onChange={this.handleChange('email')} className="form-control input-group-lg" type="text"  placeholder="Your Email" />
                     </div>
                   </div>
                   <div className="row">
                     <div className="form-group col-xs-12">
                       <label htmlFor="password" className="sr-only">Password</label>
-                      <input id="password" className="form-control input-group-lg" type="password" name="password" title="Enter password" placeholder="Password" />
+                      <input id="password" value={password} onChange={this.handleChange('password')} className="form-control input-group-lg" type="password"  placeholder="Password" />
                     </div>
                   </div>
                   <div className="row">
                     <p className="birth"><strong>Date of Birth</strong></p>
                     <div className="form-group col-sm-3 col-xs-6">
                       <label htmlFor="month" className="sr-only" />
-                      <select className="form-control" id="day">
-                        <option value="Day" disabled selected>Day</option>
+                      <select className="form-control" id="day" value={day} onChange={this.handleChange('day')}>
+                        <option value="Day" >Day</option>
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
@@ -94,8 +158,8 @@ export default class Signup extends Component {
                     </div>
                     <div className="form-group col-sm-3 col-xs-6">
                       <label htmlFor="month" className="sr-only" />
-                      <select className="form-control" id="month">
-                        <option value="month" disabled selected>Month</option>
+                      <select className="form-control" id="month" value={month} onChange={this.handleChange('month')}>
+                        <option value="month" >Month</option>
                         <option>Jan</option>
                         <option>Feb</option>
                         <option>Mar</option>
@@ -112,8 +176,8 @@ export default class Signup extends Component {
                     </div>
                     <div className="form-group col-sm-6 col-xs-12">
                       <label htmlFor="year" className="sr-only" />
-                      <select className="form-control" id="year">
-                        <option value="year" disabled selected>Year</option>
+                      <select className="form-control" id="year" value={year} onChange={this.handleChange('year')}>
+                        <option value="year">Year</option>
                         <option>2000</option>
                         <option>2001</option>
                         <option>2002</option>
@@ -131,28 +195,28 @@ export default class Signup extends Component {
                   </div>
                   <div className="form-group gender">
                     <label className="radio-inline">
-                      <input type="radio" name="optradio" defaultChecked />Male
+                      <input type="radio" name="optradio" />Male
                     </label>
                     <label className="radio-inline">
-                      <input type="radio" name="optradio" />Female
+                      <input type="radio" name="optradio" value={gender} onChange={this.handleChange('gender')} />Female
                     </label>
                   </div>
                   <div className="row">
                     <div className="form-group col-xs-6">
                       <label htmlFor="city" className="sr-only">City</label>
-                      <input id="city" className="form-control input-group-lg reg_name" type="text" name="city" title="Enter city" placeholder="Your city" />
+                      <input id="city" value={city} onChange={this.handleChange('city')} className="form-control input-group-lg reg_name" type="text"  placeholder="Your city" />
                     </div>
                     <div className="form-group col-xs-6">
                       <label htmlFor="country" className="sr-only" />
-                      <select className="form-control" id="country">
-                        <option value="country" disabled selected>Country</option>
-                        <option value="AFG">Afghanistan</option>
-                        <option value="ALA">�land Islands</option>
-                        <option value="ALB">Albania</option>
-                        <option value="DZA">Algeria</option>
-                        <option value="ASM">American Samoa</option>
-                        <option value="AND">Andorra</option>
-                        <option value="AGO">Angola</option>
+                      <select className="form-control" id="country" value={country} onChange={this.handleChange('country')} >
+                        <option value="country">Country</option>
+                        <option value="Afghanistan">Afghanistan</option>
+                        <option value="land Islands">land Islands</option>
+                        <option value="Albania">Albania</option>
+                        <option value="Algeria">Algeria</option>
+                        <option value="American Samoa">American Samoa</option>
+                        <option value="Andorra">Andorra</option>
+                        <option value="Angola">Angola</option>
                         <option value="AIA">Anguilla</option>
                         <option value="ATA">Antarctica</option>
                         <option value="ATG">Antigua and Barbuda</option>
@@ -307,7 +371,7 @@ export default class Signup extends Component {
                         <option value="NZL">New Zealand</option>
                         <option value="NIC">Nicaragua</option>
                         <option value="NER">Niger</option>
-                        <option value="NGA">Nigeria</option>
+                        <option value="Nigeria">Nigeria</option>
                         <option value="NIU">Niue</option>
                         <option value="NFK">Norfolk Island</option>
                         <option value="MNP">Northern Mariana Islands</option>
@@ -400,29 +464,35 @@ export default class Signup extends Component {
                   </div>
                 </form>{/*Register Now Form Ends*/}
                 <p><Link to="#">Already have an account?</Link></p>
-                <button className="btn btn-primary">Register Now</button>
+                {
+                  loading ? (<h2>Loading ..</h2>) : (<button className="btn btn-primary" onClick={this.signUp}>Register Now</button>)
+                }
+                
               </div>{/*Registration Form Contents Ends*/}
               {/*Login*/}
               <div className="tab-pane" id="login">
                 <h3>Login</h3>
                 <p className="text-muted">Log into your account</p>
                 {/*Login Form*/}
+                <p className='text-danger text-center'>{error}</p>
                 <form name="Login_form" id="Login_form">
                   <div className="row">
                     <div className="form-group col-xs-12">
                       <label htmlFor="my-email" className="sr-only">Email</label>
-                      <input id="my-email" className="form-control input-group-lg" type="text" name="Email" title="Enter Email" placeholder="Your Email" />
+                      <input id="my-email" value={email} onChange={this.handleChange('email')}  className="form-control input-group-lg" type="text" placeholder="Your Email" />
                     </div>
                   </div>
                   <div className="row">
                     <div className="form-group col-xs-12">
                       <label htmlFor="my-password" className="sr-only">Password</label>
-                      <input id="my-password" className="form-control input-group-lg" type="password" name="password" title="Enter password" placeholder="Password" />
+                      <input id="my-password" value={password} onChange={this.handleChange('password')} className="form-control input-group-lg" type="password"  title="Enter password" placeholder="Password" />
                     </div>
                   </div>
                 </form>{/*Login Form Ends*/} 
                 <p><Link to="#">Forgot Password?</Link></p>
-                <button className="btn btn-primary">Login Now</button>
+                {
+                  loading ? (<h2>Loading ....</h2>) : (<button className="btn btn-primary" onClick={this.signIn}>Login Now</button>)
+                }
               </div>
             </div>
           </div>
