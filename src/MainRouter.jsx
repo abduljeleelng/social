@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {  BrowserRouter, Route, Switch} from "react-router-dom";
 import {Home, SignUp} from './screen';
-import PrivateRoute from './api/PrivateRoute';
+import PrivateRoute from './screen/auth/PrivateRoute';
 
 
 export default class MainRouter extends Component {

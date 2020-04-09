@@ -1,7 +1,7 @@
 import React from "react";
 import {BrowserRouter, Route} from "react-router-dom";
-import { isAuthenticated } from "./index";
-import SignUp from '../screen/Signup';
+import { isAuthenticated } from "./";
+import {SignUp} from '../';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <BrowserRouter>

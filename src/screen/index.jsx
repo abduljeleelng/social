@@ -1,4 +1,4 @@
-import SignUp from './Signup';
-import Home from './Home';
+import SignUp from './users/Signup';
+import Home from './newsfeed/Home';
 
 export {SignUp,Home}
