@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import ReactPlaceholder from 'react-placeholder';
 import "react-placeholder/lib/reactPlaceholder.css";
 import logo from '../asset/img/logo.png';
-import {Follow, Footer,Create,Header, Active, Profile, Post} from './component';
+import {Follow, Footer,Create,Header, Active, Profile, Peoples} from './component';
 const user = {user:{_id:"89",firstName:"Yusuff"}}
-export default class Home extends Component {
+
+
+
+export default class People extends Component {
   constructor(props){
     super(props);
     this.state={
@@ -41,7 +44,13 @@ export default class Home extends Component {
             {/* Post Create Box End*/}
           {/* Post Content================================================= */}
           <ReactPlaceholder showLoadingAnimation type='media' rows={7} ready={this.state.ready}>
-            <Post />
+            <div class="people-nearby">
+                <div class="google-maps">
+                    <div id="map" class="map"></div>
+                </div>
+                {/** nearby peolples  */}
+                <Peoples />
+            </div>
           </ReactPlaceholder>
         </div>
         {/* Newsfeed Common Side Bar Right

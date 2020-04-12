@@ -13,10 +13,10 @@ export default function Profile() {
             <ul className="nav-news-feed">
                 <li><i className="icon ion-ios-paper" /><div><Link to="/">My Newsfeed</Link></div></li>
                 <li><i className="icon ion-ios-people" /><div><Link to="/people">People Nearby</Link></div></li>
-                <li><i className="icon ion-ios-people-outline" /><div><Link to="newsfeed-friends">Friends</Link></div></li>
-                <li><i className="icon ion-chatboxes" /><div><Link to="newsfeed-messages">Messages</Link></div></li>
-                <li><i className="icon ion-images" /><div><Link to="newsfeed-images.html">Images</Link></div></li>
-                <li><i className="icon ion-ios-videocam" /><div><Link to="newsfeed-videos.html">Videos </Link></div></li>
+                <li><i className="icon ion-ios-people-outline" /><div><Link to="friend">Friends</Link></div></li>
+                <li><i className="icon ion-chatboxes" /><div><Link to="chat">Messages</Link></div></li>
+                <li><i className="icon ion-images" /><div><Link to="images">Images</Link></div></li>
+                <li><i className="icon ion-ios-videocam" /><div><Link to="video">Videos </Link></div></li>
             </ul>
         </Fragment>
     )
