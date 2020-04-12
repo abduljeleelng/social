@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import ReactPlaceholder from 'react-placeholder';
 import "react-placeholder/lib/reactPlaceholder.css";
 import logo from '../asset/img/logo.png';
-import {Follow, Footer,Create,Header, Active, Profile, Post} from './component';
+import {Follow, Footer,Create,Header, Active, Profile, Images} from './component';
 const user = {user:{_id:"89",firstName:"Yusuff"}}
-export default class Home extends Component {
+
+
+export default class Image extends Component {
   constructor(props){
     super(props);
     this.state={
@@ -41,7 +43,7 @@ export default class Home extends Component {
             {/* Post Create Box End*/}
           {/* Post Content================================================= */}
           <ReactPlaceholder showLoadingAnimation type='media' rows={7} ready={this.state.ready}>
-            <Post />
+            <Images />
           </ReactPlaceholder>
         </div>
         {/* Newsfeed Common Side Bar Right
